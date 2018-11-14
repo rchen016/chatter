@@ -3,7 +3,15 @@ var mongoose = require("mongoose"),
 
 var userSchema = new mongoose.Schema({
 	username: String,
-	password: String
+	password: String,
+	friendList: {
+		type: Array,
+		"default": [Object]
+	},
+	friendReqList: {
+		type: Array,
+		"default": [Object]
+	}
 });
 
 userSchema.plugin(passportLocalMongoose);

@@ -10,6 +10,7 @@ var express = require("express")
 	bodyParser = require("body-parser");
 var app = express();
 var messageRoutes    = require("./routes/message"),
+    friendRoutes     = require("./routes/friend"),
     indexRoutes      = require("./routes/index");
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -43,6 +44,7 @@ mongoose.connect("mongodb://localhost/chat_app");
 
 app.use("/message",messageRoutes);
 app.use(indexRoutes);
+app.use(friendRoutes);
 
 app.listen(3000, process.env.IP, function(){
   console.log("Server Up...");
