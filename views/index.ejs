@@ -1,6 +1,14 @@
+<% include ./partials/header %>
+
 <html>
+<% if(currentUser){ %>
+	<%= currentUser.username %>
+<% } %>
+
 	<form action="/message" method="POST">
 		<textarea name="message"  placeholder="Message"/></textarea><br />
 		<button>Send</button>
 	</form>
 </html>
+
+<% include ./partials/footer %>
