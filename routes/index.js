@@ -3,12 +3,12 @@ var express = require("express");
 var router = express.Router();
 
 router.get("/",function(req,res){
-	res.render("index.ejs");
+	res.render("index");
 });
 
 //Login
 router.get("/login",function(req,res){
-	res.render("login.ejs");
+	res.render("login",{message:req.flash("error")});
 });
 
 router.post("/login", passport.authenticate("local",
@@ -20,11 +20,16 @@ router.post("/login", passport.authenticate("local",
 
 //Sign Up
 router.get("/register",function(req,res){
-	res.render("register.ejs");
+	res.render("register");
 });
 
 
 router.post("/register",function(req,res){
+	if(req.body.password != req.body.confirmPassword){
+		req.flash("error", "Passwords Don't match!");
+		res.redirect("back");
+		return;
+	}
 	var newUser = new User({username: req.body.username});
 	User.register(newUser,req.body.password,function(err,user){
 		if(err){
@@ -32,6 +37,7 @@ router.post("/register",function(req,res){
 		}
 		else{
 			passport.authenticate("local")(req, res, function(){
+				req.flash("success", "Account Created");
 				res.redirect("/");
 			});
 		}
@@ -41,6 +47,7 @@ router.post("/register",function(req,res){
 //Logout
 router.get("/logout",function(req,res){
 	req.logout();
+	req.flash("success", "Sucessfully Logged Out!");
 	res.redirect("/");
 });
 
