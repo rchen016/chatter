@@ -3,7 +3,12 @@ var express = require("express");
 var router = express.Router();
 
 router.get("/",function(req,res){
-	res.render("login");
+	if(req.user){
+		res.render("message/chatlist");
+	}
+	else{
+		res.render("login");
+	}
 });
 
 //Login
