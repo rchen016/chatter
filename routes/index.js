@@ -3,7 +3,7 @@ var express = require("express");
 var router = express.Router();
 
 router.get("/",function(req,res){
-	res.render("index");
+	res.render("login");
 });
 
 //Login
@@ -13,7 +13,7 @@ router.get("/login",function(req,res){
 
 router.post("/login", passport.authenticate("local",
 	{
-		successRedirect: "/",
+		successRedirect: "message/chatlist",
 		failureRedirect: "/login"
 	}),function(req,res){
 });
@@ -33,7 +33,8 @@ router.post("/register",function(req,res){
 	var newUser = new User({username: req.body.username});
 	User.register(newUser,req.body.password,function(err,user){
 		if(err){
-			console.log("welp");
+			req.flash("error", err);
+			return res.render("register");
 		}
 		else{
 			passport.authenticate("local")(req, res, function(){
@@ -48,7 +49,7 @@ router.post("/register",function(req,res){
 router.get("/logout",function(req,res){
 	req.logout();
 	req.flash("success", "Sucessfully Logged Out!");
-	res.redirect("/");
+	res.redirect("/login");
 });
 
 module.exports = router;

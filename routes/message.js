@@ -20,4 +20,8 @@ router.post("/",function(req,res){
 	return;
 });
 
+router.get("/chatlist",function(req,res){
+	res.render("message/chatlist");
+});
+
 module.exports = router;
