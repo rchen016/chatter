@@ -1,13 +1,9 @@
 var express = require("express")
 	mongoose = require("mongoose"),
+	Message = require("./models/message");
 	bodyParser = require("body-parser");
 var app = express();
-
-
-var MessageSchema = mongoose.model("Message",{
-	name: String,
-	message : String
-});
+var messageRoutes    = require("./routes/message");
 
 app.use(express.static(__dirname));
 app.use(bodyParser.json());
@@ -19,24 +15,7 @@ app.get("/",function(req,res){
 	res.render("index.ejs");
 });
 
-app.get("/message", function(req,res){
-	MessageSchema.find({},function(err,found){
-		res.send(found);
-	});
-});
-
-app.post("/message",function(req,res){
-	console.log("holla");
-	var name = "dsgsddfsfs";
-	var text = req.body.message;
-	MessageSchema.create({name:name,message:text},function(err){
-	 	if(err){
-			console.log("er");
-		}
-	});
-	res.redirect("back");
-	return;
-});
+app.use("/message",messageRoutes);
 
 app.listen(3000, process.env.IP, function(){
   console.log("Server Up...");
