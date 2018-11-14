@@ -32,9 +32,9 @@ router.post("/friendRequest",function(req,res){
 		}
 		console.log(found);
 		// console.log("??????????");
-		// req.user.friendReqList.push(found);
+		req.user.friendReqList.push(found);
 		// console.log("??????????");
-		// req.user.save();
+		req.user.save();
 		// console.log("??????????");
 		res.render("friend/request");
 		return;
