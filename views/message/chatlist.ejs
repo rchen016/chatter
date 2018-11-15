@@ -1,13 +1,15 @@
 <% include ../partials/header %>
 
 <html>
-	<ul class="list-group">
-		<%for(var i=0;i<currentUser.friendList.length;i++){ %>
-			<li class="list-group-item d-flex justify-content-between align-items-center">
-				<%=	currentUser.friendList[i] %>
-			</li>
-		<% } %>
-	</ul>
+	<div class="container displayList">
+		<ul class="list-group">
+			<%for(var i=0;i<currentUser.friendList.length;i++){ %>
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					<%=	currentUser.friendList[i] %>
+				</li>
+			<% } %>
+		</ul>
+	</div>
 </html>
 
 <% include ../partials/footer %>

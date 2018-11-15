@@ -17,9 +17,20 @@ router.post("/friendRequest",function(req,res){
 		if(err){
 			req.flash("error", "No User Found");
 		}
+		for(var i=0; i< found[0].friendReqList.length; i++){
+			console.log("1: ",found[0].friendReqList[i]);
+			console.log("2: ",req.user.username);
+			if(found[0].friendReqList[i]==req.user.username){
+				req.flash("error", "Already Requested");
+				res.locals.error = req.flash("error");
+				res.render("friend/request");
+				return;
+			}
+		}
 		found[0].friendReqList.push(req.user.username);
 		found[0].save();
 		req.flash("success", "Requested");
+		res.locals.success = req.flash("success");
 		res.render("friend/request");
 		return;
 	});
@@ -48,6 +59,7 @@ router.post("/addFriend",function(req,res){
 		found[0].friendList.push(req.user.username);
 		found[0].save();
 		req.flash("success", "Added!");
+		res.locals.success = req.flash("success");
 		res.render("friend/request");
 		return;
 	});
