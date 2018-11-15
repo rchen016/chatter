@@ -1,4 +1,5 @@
-var express = require("express");
+var express = require("express"),
+	User    = require("../models/user");
 var router = express.Router();
 
 router.get("/", function(req,res){
@@ -8,20 +9,41 @@ router.get("/", function(req,res){
 });
 
 router.post("/",function(req,res){
-	console.log("holla");
-	var name = "dsgsddfsfs";
+	var sendTo = req.body.sendTo;
+	var sender = req.user.username;
 	var text = req.body.message;
-	Message.create({name:name,message:text},function(err){
+	Message.create({sendTo:sendTo,sender:sender,message:text},function(err,created){
 	 	if(err){
-			console.log("er");
+			req.flash("error",error);
+			res.redirect("back");
+			return;
 		}
+		req.user.messageLog.push(created);
+		req.user.save();
+		User.find({
+			"username":{
+				"$regex":req.body.sendTo,
+				"$options": "i"
+			}
+		},function(err,found){
+			if(err){
+				req.flash("error", "No User Found");
+			}
+			found[0].messageLog.push(created);
+			found[0].save();
+			req.flash("success","Sent");
+			res.redirect("/");
+			return;
+		});
 	});
-	res.redirect("back");
-	return;
 });
 
 router.get("/chatlist",function(req,res){
 	res.render("message/chatlist");
+});
+
+router.post("/viewmessage",function(req,res){
+	res.render("message/viewmessage",{talkingto:req.body.test});
 });
 
 module.exports = router;

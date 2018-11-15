@@ -4,7 +4,7 @@ var router = express.Router();
 
 router.get("/",function(req,res){
 	if(req.user){
-		res.render("message/chatlist");
+		res.redirect("message/chatlist");
 	}
 	else{
 		res.render("login");
