@@ -11,6 +11,10 @@ var userSchema = new mongoose.Schema({
 	friendReqList: {
 		type: Array,
 		"default": [Object]
+	},
+	messageLog:{
+		type: Array,
+		"default": [Object]
 	}
 });
 

@@ -8,19 +8,6 @@ router.get("/friendRequest",function(req,res){
 });
 
 router.post("/friendRequest",function(req,res){
-	console.log(req.body.username);
-	// User.find({},function(err,found){
-	// 	console.log("People");
-	// 	for(var i=0;i<found.length;i++){
-	// 		console.log(found[i]);
-	// 		if(found[i].username==req.body.username){
-	// 			req.user.friendReqList.push(found[i]);
-	// 			req.user.save();
-	// 			res.redirect("/");
-	// 			return;
-	// 		}
-	// 	}
-	// });
 	User.find({
 		"username":{
 			"$regex": req.body.username,
@@ -30,15 +17,21 @@ router.post("/friendRequest",function(req,res){
 		if(err){
 			req.flash("error", "No User Found");
 		}
-		console.log(found);
-		// console.log("??????????");
-		req.user.friendReqList.push(found);
-		// console.log("??????????");
-		req.user.save();
-		// console.log("??????????");
+		console.log("FOUND: ", found[0].friendReqList);
+		found[0].friendReqList.push(req.user);
+		console.log("FOUND: ", found[0].friendReqList);
+		found[0].save();
+		req.flash("success", "Requested");
 		res.render("friend/request");
 		return;
 	});
 });
+
+router.post("/addFriend",function(req,res){
+	console.log(req.body.test);
+	res.send("ADDDD");
+
+});
+
 
 module.exports = router;
