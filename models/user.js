@@ -5,16 +5,13 @@ var userSchema = new mongoose.Schema({
 	username: String,
 	password: String,
 	friendList: {
-		type: Array,
-		"default": [Object]
+		type: Array
 	},
 	friendReqList: {
-		type: Array,
-		"default": [Object]
+		type: Array
 	},
 	messageLog:{
-		type: Array,
-		"default": [Object]
+		type: Array
 	}
 });
 

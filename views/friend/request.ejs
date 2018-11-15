@@ -1,9 +1,6 @@
 <% include ../partials/header %>
 
 <html>
-	<% if(currentUser){ %>
-		<%= currentUser.username %>
-	<% } %>
 	<div class="container">
 		<h1 style="text-align:center;">Request Friend</h1>
 		<div style="width:30%; margin:25px auto;">
@@ -18,19 +15,14 @@
 			<a href="#">Go Back</a>
 		</div>
 <ul class="list-group">
-		<%for(var i=0;i<currentUser.friendReqList.length;i++){ %>
+		<% for(var i=0;i<currentUser.friendReqList.length;i++){ %>
 			<li class="list-group-item d-flex justify-content-between align-items-center">
-				<%=	currentUser.friendReqList[i].username %>
+				<%=	currentUser.friendReqList[i] %>
 			</li>
 			<form method="POST" action="/addFriend">
-				<button  name="test" value=<%= currentUser.friendReqList[i].username %>>Add</button>
+				<button name="addfriend" value=<%= currentUser.friendReqList[i] %> >Add</button>
 			</form>
 		<% } %>
-
-
-
-
-
 	</div>
 </html>
 

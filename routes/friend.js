@@ -17,9 +17,7 @@ router.post("/friendRequest",function(req,res){
 		if(err){
 			req.flash("error", "No User Found");
 		}
-		console.log("FOUND: ", found[0].friendReqList);
-		found[0].friendReqList.push(req.user);
-		console.log("FOUND: ", found[0].friendReqList);
+		found[0].friendReqList.push(req.user.username);
 		found[0].save();
 		req.flash("success", "Requested");
 		res.render("friend/request");
@@ -28,9 +26,31 @@ router.post("/friendRequest",function(req,res){
 });
 
 router.post("/addFriend",function(req,res){
-	console.log(req.body.test);
-	res.send("ADDDD");
-
+	var counter = 0;
+	console.log(req.body.addfriend);
+	User.find({
+		"username":{
+			"$regex": req.body.addfriend,
+			"$options": "i"
+		}
+	},function(err,found){
+		if(err){
+			req.flash("error", "No User Found");
+		}
+		req.user.friendReqList.forEach(function(found){
+			if(req.body.addfriend == found){
+				req.user.friendReqList.splice(counter,1);
+			}
+			counter = counter + 1;
+		});
+		req.user.friendList.push(req.body.addfriend);
+		req.user.save();
+		found[0].friendList.push(req.user.username);
+		found[0].save();
+		req.flash("success", "Added!");
+		res.render("friend/request");
+		return;
+	});
 });
 
 
