@@ -8,6 +8,7 @@ router.get("/friendRequest",function(req,res){
 });
 
 router.post("/friendRequest",function(req,res){
+    //find requested user
 	User.find({
 		"username":{
 			"$regex": req.body.username,
@@ -16,7 +17,17 @@ router.post("/friendRequest",function(req,res){
 	},function(err,found){
 		if(err){
 			req.flash("error", "No User Found");
+            res.redirect("back");
+    		return;
 		}
+        //ensure user exist
+        if(found[0]==undefined){
+            req.flash("error", "No User Found");
+            res.locals.error = req.flash("error");
+            res.redirect("back");
+    		return;
+        }
+        //check if requested already
 		for(var i=0; i< found[0].friendReqList.length; i++){
 			console.log("1: ",found[0].friendReqList[i]);
 			console.log("2: ",req.user.username);
@@ -31,22 +42,31 @@ router.post("/friendRequest",function(req,res){
 		found[0].save();
 		req.flash("success", "Requested");
 		res.locals.success = req.flash("success");
-		res.render("friend/request");
+		res.redirect("/friendRequest");
 		return;
 	});
 });
 
 router.post("/addFriend",function(req,res){
 	var counter = 0;
-	console.log(req.body.addfriend);
+	//find friend to add
 	User.find({
 		"username":{
 			"$regex": req.body.addfriend,
 			"$options": "i"
 		}
 	},function(err,found){
+        //ensure user exist
+        if(found[0]==undefined){
+            req.flash("error", "No User Found");
+            res.locals.error = req.flash("error");
+            res.redirect("back");
+    		return;
+        }
 		if(err){
 			req.flash("error", "No User Found");
+            res.redirect("back");
+    		return;
 		}
 		req.user.friendReqList.forEach(function(found){
 			if(req.body.addfriend == found){
