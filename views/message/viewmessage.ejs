@@ -1,6 +1,35 @@
 <% include ../partials/header %>
 
 <html>
+
+	<script>
+		var socket = io();
+		$(() => {
+			$("#send").click(()=>{
+				//sendMessage({name: $("#name").val(), message: $("#message").val()});
+				console.log("test");
+				test();
+			})
+
+		})
+		function test(){
+			$.get('http://localhost:3000/logout', () => {
+  			
+  		  })
+		}
+		socket.on('message', addMessages)
+		function addMessages(message){
+			$("#messages").append('<h4> ${message.name} </h4> <p> ${message.message} </p>')
+		}
+		function getMessages(){
+		  $.get('http://localhost:3000/messages', (data) => {
+			data.forEach(addMessages);
+		  })
+		}
+		function sendMessage(message){
+		  $.post('http://localhost:3000/messages', message)
+		}
+	</script>
 	<div class="container displayList">
 		Talking To: <%= talkingto %>
 		<%for(var i=0;i<currentUser.messageLog.length;i++){ %>
@@ -16,7 +45,7 @@
 		<form action="/message" method="POST">
 			<textarea name="message"  placeholder="Message"/></textarea><br />
 			<input style="display:none;" name="sendTo" value=<%= talkingto %> />
-			<button>Send</button>
+			<button id="send">Send</button>
 		</form>
 	</div>
 </html>

@@ -2,7 +2,8 @@ var express = require("express"),
     User    = require("../models/user");
 
 var router = express.Router();
-
+var http = require("http").Server(router);
+var io = require("socket.io")(http);
 router.get("/friendRequest",function(req,res){
 	res.render("friend/request");
 });

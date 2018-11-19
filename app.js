@@ -13,6 +13,9 @@ var messageRoutes    = require("./routes/message"),
     friendRoutes     = require("./routes/friend"),
     indexRoutes      = require("./routes/index");
 
+	var http = require("http").Server(app);
+	var io = require("socket.io")(http);
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
@@ -46,6 +49,10 @@ app.use("/message",messageRoutes);
 app.use(indexRoutes);
 app.use(friendRoutes);
 
-app.listen(3000, process.env.IP, function(){
-  console.log("Server Up...");
+var server = http.listen(3000, () => {
+  console.log('server is running on port', server.address().port);
 });
+
+// app.listen(3000, process.env.IP, function(){
+//   console.log("Server Up...");
+// });

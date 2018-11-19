@@ -1,7 +1,8 @@
 var express = require("express");
 
 var router = express.Router();
-
+var http = require("http").Server(router);
+var io = require("socket.io")(http);
 router.get("/",function(req,res){
 	if(req.user){
 		res.redirect("message/chatlist");

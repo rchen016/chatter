@@ -1,6 +1,15 @@
 var express = require("express"),
 	User    = require("../models/user");
 var router = express.Router();
+var http = require("http").Server(router);
+var io = require("socket.io")(http);
+
+//socketio
+io.on("connection", () =>{
+ console.log("a user is connected");
+});
+
+//
 
 router.get("/", function(req,res){
 	Message.find({},function(err,found){
@@ -9,6 +18,7 @@ router.get("/", function(req,res){
 });
 
 router.post("/",function(req,res){
+	io.emit('message', "tesNNJNt");
 	var sendTo = req.body.sendTo;
 	var sender = req.user.username;
 	var text = req.body.message;
@@ -44,7 +54,7 @@ router.get("/chatlist",function(req,res){
 	res.render("message/chatlist");
 });
 
-router.post("/viewmessage",function(req,res){
+router.post("/:id/viewmessage",function(req,res){
 	res.render("message/viewmessage",{talkingto:req.body.sendTo});
 });
 
