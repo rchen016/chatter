@@ -29,6 +29,8 @@ router.post("/",function(req,res){
 			if(err){
 				req.flash("error", "No User Found");
 			}
+			console.log("Send To ",req.body.sendTo);
+			console.log("FOUND: ",found[0]);
 			found[0].messageLog.push(created);
 			found[0].save();
 			req.flash("success","Sent");
@@ -43,7 +45,7 @@ router.get("/chatlist",function(req,res){
 });
 
 router.post("/viewmessage",function(req,res){
-	res.render("message/viewmessage",{talkingto:req.body.test});
+	res.render("message/viewmessage",{talkingto:req.body.sendTo});
 });
 
 module.exports = router;

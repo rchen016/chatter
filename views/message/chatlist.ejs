@@ -6,8 +6,9 @@
 			<%for(var i=0;i<currentUser.friendList.length;i++){ %>
 				<li class="list-group-item d-flex justify-content-between align-items-center">
 					<%=	currentUser.friendList[i] %>
-					<form method="POST" action="viewmessage">
-						<button class="btn btn-primary" name="test" value=<%=currentUser.friendList[i]%> >View</button>
+					<form action="/message/viewmessage" method="POST">
+						<input style="display:none;" name="sendTo" value=<%= currentUser.friendList[i] %> />
+						<button>View</button>
 					</form>
 				</li>
 			<% } %>
