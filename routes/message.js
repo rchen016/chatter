@@ -4,13 +4,6 @@ var router = express.Router();
 var http = require("http").Server(router);
 var io = require("socket.io")(http);
 
-//socketio
-io.on("connection", () =>{
- console.log("a user is connected");
-});
-
-//
-
 router.get("/", function(req,res){
 	Message.find({},function(err,found){
 		res.send(found);
@@ -18,7 +11,6 @@ router.get("/", function(req,res){
 });
 
 router.post("/",function(req,res){
-	io.emit('message', "tesNNJNt");
 	var sendTo = req.body.sendTo;
 	var sender = req.user.username;
 	var text = req.body.message;
@@ -43,9 +35,11 @@ router.post("/",function(req,res){
 			console.log("FOUND: ",found[0]);
 			found[0].messageLog.push(created);
 			found[0].save();
-			req.flash("success","Sent");
-			res.redirect("/");
-			return;
+			console.log("right before emit");
+			io.emit('message', req.body);
+			// req.flash("success","Sent");
+			// res.redirect("/");
+			// return;
 		});
 	});
 });

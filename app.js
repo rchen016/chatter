@@ -48,7 +48,13 @@ mongoose.connect("mongodb://localhost/chat_app");
 app.use("/message",messageRoutes);
 app.use(indexRoutes);
 app.use(friendRoutes);
+io.on('connection', socket => {
+  console.log('User connected')
 
+  socket.on('disconnect', () => {
+    console.log('user disconnected')
+  })
+})
 var server = http.listen(3000, () => {
   console.log('server is running on port', server.address().port);
 });
