@@ -3,35 +3,78 @@
 <html>
 
 
-	<div id="message" class="container displayList">
-		Talking To: <%= talkingto %>
-		<%for(var i=0;i<currentUser.messageLog.length;i++){ %>
-			<li class="list-group-item d-flex justify-content-between align-items-center">
-				<% if(currentUser.messageLog[i].sendTo==talkingto && currentUser.messageLog[i].sender==currentUser.username){ %>
-						<%= currentUser.username %>: <%= currentUser.messageLog[i].message %>
-				<% } %>
-				<% if(currentUser.messageLog[i].sender==talkingto){ %>
-						<%= talkingto %>: <%= currentUser.messageLog[i].message %>
-				<% } %>
-			</li>
-		<% } %>
-		<form action="/message" method="POST">
-			<textarea name="message"  placeholder="Message"/></textarea><br />
-			<input style="display:none;" name="sendTo" value=<%= talkingto %> />
-			<button id="send">Send</button>
-		</form>
-	</div>
-	<script>
+
+<section>
+  <div id="change_username">
+<input id="username" type="text" />
+<button id="send_username" type="button">Change username</button>
+  </div>
+</section>
+
+<section id="chatroom">
+  <section id="feedback"></section>
+</section>
+
+
+
+<section id="input_zone">
+  <input id="message" class="vertical-align" type="text" />
+  <button id="send_message" class="vertical-align" type="button">Send</button>
+</section>
+<script>
+//make connection
+var socket = io.connect()
+
+//buttons and inputs
+var message = $("#message")
+var username = $("#username")
+var send_message = $("#send_message")
+var send_username = $("#send_username")
+var chatroom = $("#chatroom")
+var feedback = $("#feedback")
+
+//Emit message
+send_message.click(function(){
+	socket.emit('new_message', {message : message.val()})
+})
+
+//Listen on new_message
+socket.on("new_message", (data) => {
+	feedback.html('');
+	message.val('');
+	chatroom.append("<p class='message'>" + data.username + ": " + data.message + "</p>")
+})
+
+//Emit a username
+send_username.click(function(){
+	socket.emit('change_username', {username : username.val()})
+})
+
+//Emit typing
+message.bind("keypress", () => {
+	socket.emit('typing')
+})
+
+//Listen on typing
+socket.on('typing', (data) => {
+	feedback.html("<p><i>" + data.username + " is typing a message..." + "</i></p>")
+})
+</script>
+	<!-- <script>
 		var socket = io();
 		$(() => {
 			$("#send").click(()=>{
 				//sendMessage({name: $("#name").val(), message: $("#message").val()});
-				console.log("click");
+				socket.emit("clicksend",{test:"sendThat"});
+				$("#messages").append('<h4> 78945612 </h4>')
 			})
 
 		})
+		socket.on("clicksend",function(data){
+			console.log("clicked");
+		});
 		//	socket.on('message', test)
-			socket.on('message', addMessages)
+		socket.on('message', addMessages)
 		function test(){
 			console.log("Yahzee");
 		}
@@ -50,7 +93,8 @@
 		function sendMessage(message){
 		  $.post('http://localhost:3000/messages', message)
 		}
-	</script>
+	</script> -->
+
 </html>
 
 <% include ../partials/footer %>

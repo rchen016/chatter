@@ -2,7 +2,8 @@ var express = require("express"),
 	User    = require("../models/user");
 var router = express.Router();
 var http = require("http").Server(router);
-var io = require("socket.io")(http);
+// var io = require("socket.io")(http);
+
 
 router.get("/", function(req,res){
 	Message.find({},function(err,found){
@@ -31,8 +32,14 @@ router.post("/",function(req,res){
 			if(err){
 				req.flash("error", "No User Found");
 			}
-			console.log("Send To ",req.body.sendTo);
-			console.log("FOUND: ",found[0]);
+			const io = res.locals.socketio;
+			io.on("connection",function(socket){
+				console.log('Message JS');
+
+			});
+			//console.log("Send To ",req.body.sendTo);
+			//console.log("FOUND: ",found[0]);
+		//	console.log(messageTest);
 			found[0].messageLog.push(created);
 			found[0].save();
 			console.log("right before emit");
