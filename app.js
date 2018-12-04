@@ -40,6 +40,7 @@ app.use(function(req,res,next){
 	res.locals.error = req.flash("error");
 	res.locals.success = req.flash("success");
 	res.locals.socketio = io;
+	res.locals.saveMessage = "";
 	next();
 });
 //
@@ -51,7 +52,7 @@ app.use(indexRoutes);
 app.use(friendRoutes);
 
 io.on("connection",function(socket){
-	console.log('User connected');
+	// console.log('User connected');
 
 	socket.on('disconnect', () => {
 		console.log('user disconnected');
@@ -65,7 +66,7 @@ io.on("connection",function(socket){
 	console.log('New user connected')
 
 	//default username
-	socket.username = "Anonymous"
+	socket.username = ""
 
     //listen on change_username
     socket.on('change_username', (data) => {
@@ -75,6 +76,7 @@ io.on("connection",function(socket){
     //listen on new_message
     socket.on('new_message', (data) => {
         //broadcast the new message
+		console.log("new_message appjs");
         io.sockets.emit('new_message', {message : data.message, username : socket.username});
     })
 

@@ -2,7 +2,9 @@
 
 <html>
 
-
+<p>
+	<%= talkingto %>
+</p>
 
 <section>
   <div id="change_username">
@@ -18,8 +20,9 @@
 
 
 <section id="input_zone">
-  <input id="message" class="vertical-align" type="text" />
-  <button id="send_message" class="vertical-align" type="button">Send</button>
+		<input id="message" class="vertical-align" type="text" />
+		<input id="sendTo" style="display:none;" name="sendTo" value="test" />
+	    <button action="/message" id="send_message" class="vertical-align" type="button">Send</button>
 </section>
 <script>
 //make connection
@@ -32,10 +35,12 @@ var send_message = $("#send_message")
 var send_username = $("#send_username")
 var chatroom = $("#chatroom")
 var feedback = $("#feedback")
-
+getMessages();
 //Emit message
 send_message.click(function(){
-	socket.emit('new_message', {message : message.val()})
+	console.log("User: ", "<%=talkingto%>");
+	socket.emit('new_message', {message : message.val(),sendTo:"<%=talkingto%>"});
+	sendMessage({message: message.val(),sendTo:"<%=talkingto%>"});
 })
 
 //Listen on new_message
@@ -59,6 +64,18 @@ message.bind("keypress", () => {
 socket.on('typing', (data) => {
 	feedback.html("<p><i>" + data.username + " is typing a message..." + "</i></p>")
 })
+
+function sendMessage(message){
+	$.post('http://localhost:3000/message', message);
+}
+function addMessages(message){
+	chatroom.append("<p class='message'>" + message.username + ": " + message.message + "</p>")
+}
+function getMessages(){
+	 $.get('http://localhost:3000/message', (data) => {
+	   data.forEach(addMessages);
+	 })
+   }
 </script>
 	<!-- <script>
 		var socket = io();

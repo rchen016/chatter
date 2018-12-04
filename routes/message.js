@@ -2,19 +2,38 @@ var express = require("express"),
 	User    = require("../models/user");
 var router = express.Router();
 var http = require("http").Server(router);
-// var io = require("socket.io")(http);
+var io = require("socket.io")(http);
 
 
 router.get("/", function(req,res){
-	Message.find({},function(err,found){
-		res.send(found);
+	console.log("dsfsdfsd");
+	// Message.find({},function(err,found){
+	// 	res.send(found);
+	// });
+	User.find({
+		"username":{
+			"$regex":req.user.username,
+			"$options": "i"
+		}
+	},function(err,found){
+		console.log("message owner", found[0].messageLog);
+		res.send(found[0].messageLog);
 	});
 });
 
-router.post("/",function(req,res){
+router.post("/", async function(req,res){
 	var sendTo = req.body.sendTo;
 	var sender = req.user.username;
 	var text = req.body.message;
+	console.log("Enter /message");
+	console.log("Who?: ",req.body.sendTo);
+	console.log("MSG?: ",req.body.message);
+	io.on("new_message",function(socket){
+		socket.on("new_message",function(data){
+			console.log(data.name);
+
+		});
+	});
 	Message.create({sendTo:sendTo,sender:sender,message:text},function(err,created){
 	 	if(err){
 			req.flash("error",error);
@@ -32,18 +51,13 @@ router.post("/",function(req,res){
 			if(err){
 				req.flash("error", "No User Found");
 			}
-			const io = res.locals.socketio;
-			io.on("connection",function(socket){
-				console.log('Message JS');
-
-			});
+			console.log(found);
 			//console.log("Send To ",req.body.sendTo);
 			//console.log("FOUND: ",found[0]);
 		//	console.log(messageTest);
 			found[0].messageLog.push(created);
 			found[0].save();
-			console.log("right before emit");
-			io.emit('message', req.body);
+			// console.log("right before emit");
 			// req.flash("success","Sent");
 			// res.redirect("/");
 			// return;
@@ -59,4 +73,5 @@ router.post("/:id/viewmessage",function(req,res){
 	res.render("message/viewmessage",{talkingto:req.body.sendTo});
 });
 
-module.exports = router;
+//module.exports = router;
+module.exports= router;
