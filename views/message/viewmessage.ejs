@@ -66,7 +66,10 @@
 		})
 
 		function sendMessage(message){
-			$.post('http://localhost:3000/message', message);
+			//dev
+			//$.post('http://localhost:3000/message', message);
+			//Live
+			$.post('https://fierce-harbor-94742.herokuapp.com/message', message);
 		}
 		function addMessages(message){
 			console.log("Sendto: ",message.sendTo);
@@ -101,7 +104,13 @@
 			}
 		}
 		function getMessages(){
-			 $.get('http://localhost:3000/message', (data) => {
+			//Dev
+			 // $.get('http://localhost:3000/message', (data) => {
+				//  console.log("here is data:",data);
+			 //   data.forEach(addMessages);
+			 // })
+			 //Live
+			 $.get('https://fierce-harbor-94742.herokuapp.com/message', (data) => {
 				 console.log("here is data:",data);
 			   data.forEach(addMessages);
 			 })
