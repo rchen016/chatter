@@ -76,8 +76,7 @@ io.on("connection",function(socket){
     //listen on new_message
     socket.on('new_message', (data) => {
         //broadcast the new message
-		console.log("new_message appjs");
-        io.sockets.emit('new_message', {message : data.message, username : socket.username});
+        io.sockets.emit('new_message', {message : data.sendmessage, sendTo: data.sendTo, sender:data.sender});
     })
 
     //listen on typing

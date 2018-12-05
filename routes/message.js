@@ -6,17 +6,16 @@ var io = require("socket.io")(http);
 
 
 router.get("/", function(req,res){
-	console.log("dsfsdfsd");
-	// Message.find({},function(err,found){
-	// 	res.send(found);
-	// });
+	//find the current user's message log
 	User.find({
 		"username":{
 			"$regex":req.user.username,
 			"$options": "i"
 		}
 	},function(err,found){
-		console.log("message owner", found[0].messageLog);
+
+//console.log(Object.getOwnPropertyNames(found[0].messageLog[0]));
+//		console.log("log checker: ",found[0].messageLog[0].sendTo);
 		res.send(found[0].messageLog);
 	});
 });
@@ -24,16 +23,11 @@ router.get("/", function(req,res){
 router.post("/", async function(req,res){
 	var sendTo = req.body.sendTo;
 	var sender = req.user.username;
-	var text = req.body.message;
+	var text = req.body.sendmessage;
 	console.log("Enter /message");
 	console.log("Who?: ",req.body.sendTo);
-	console.log("MSG?: ",req.body.message);
-	io.on("new_message",function(socket){
-		socket.on("new_message",function(data){
-			console.log(data.name);
-
-		});
-	});
+	console.log("MSG?: ",req.body.sendmessage);
+	console.log("USER: ",req.user.username);
 	Message.create({sendTo:sendTo,sender:sender,message:text},function(err,created){
 	 	if(err){
 			req.flash("error",error);
@@ -51,7 +45,6 @@ router.post("/", async function(req,res){
 			if(err){
 				req.flash("error", "No User Found");
 			}
-			console.log(found);
 			//console.log("Send To ",req.body.sendTo);
 			//console.log("FOUND: ",found[0]);
 		//	console.log(messageTest);

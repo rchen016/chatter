@@ -1,117 +1,92 @@
 <% include ../partials/header %>
 
-<html>
+	<!-- <section id="chatroom">
+		<section id="feedback"></section>
+	</section>
 
-<p>
-	<%= talkingto %>
-</p>
-
-<section>
-  <div id="change_username">
-<input id="username" type="text" />
-<button id="send_username" type="button">Change username</button>
-  </div>
-</section>
-
-<section id="chatroom">
-  <section id="feedback"></section>
-</section>
-
-
-
-<section id="input_zone">
+	<section id="input_zone">
 		<input id="message" class="vertical-align" type="text" />
-		<input id="sendTo" style="display:none;" name="sendTo" value="test" />
-	    <button action="/message" id="send_message" class="vertical-align" type="button">Send</button>
-</section>
-<script>
-//make connection
-var socket = io.connect()
+		<button action="/message" id="send_message" class="vertical-align btn btn-primary" type="button">Send</button>
+	</section> -->
 
-//buttons and inputs
-var message = $("#message")
-var username = $("#username")
-var send_message = $("#send_message")
-var send_username = $("#send_username")
-var chatroom = $("#chatroom")
-var feedback = $("#feedback")
-getMessages();
-//Emit message
-send_message.click(function(){
-	console.log("User: ", "<%=talkingto%>");
-	socket.emit('new_message', {message : message.val(),sendTo:"<%=talkingto%>"});
-	sendMessage({message: message.val(),sendTo:"<%=talkingto%>"});
-})
 
-//Listen on new_message
-socket.on("new_message", (data) => {
-	feedback.html('');
-	message.val('');
-	chatroom.append("<p class='message'>" + data.username + ": " + data.message + "</p>")
-})
 
-//Emit a username
-send_username.click(function(){
-	socket.emit('change_username', {username : username.val()})
-})
+	<div class="container">
+	    <div class="row">
+	        <div class="col-md-5">
+				<div class="panel-body">
+                    <ul id="chatroom" class="chat">
 
-//Emit typing
-message.bind("keypress", () => {
-	socket.emit('typing')
-})
+                    </ul>
+					<section id="feedback"></section>
+				</div>
+                <div class="panel-footer">
+                    <div class="input-group">
+						<input id="message" class="vertical-align" type="text" placeholder="Type your message here..."  />
+						<button action="/message" id="send_message" class="vertical-align btn btn-primary" type="button">Send</button>
+                    </div>
+                </div>
 
-//Listen on typing
-socket.on('typing', (data) => {
-	feedback.html("<p><i>" + data.username + " is typing a message..." + "</i></p>")
-})
+	        </div>
+	    </div>
+	</div>
 
-function sendMessage(message){
-	$.post('http://localhost:3000/message', message);
-}
-function addMessages(message){
-	chatroom.append("<p class='message'>" + message.username + ": " + message.message + "</p>")
-}
-function getMessages(){
-	 $.get('http://localhost:3000/message', (data) => {
-	   data.forEach(addMessages);
-	 })
-   }
-</script>
-	<!-- <script>
-		var socket = io();
-		$(() => {
-			$("#send").click(()=>{
-				//sendMessage({name: $("#name").val(), message: $("#message").val()});
-				socket.emit("clicksend",{test:"sendThat"});
-				$("#messages").append('<h4> 78945612 </h4>')
-			})
-
+	<script>
+		//make connection
+		var socket = io.connect();
+		//buttons and inputs
+		var message = $("#message");
+		var send_message = $("#send_message");
+		var chatroom = $("#chatroom");
+		var feedback = $("#feedback");
+		//populate the message history
+		getMessages();
+		//Emit message
+		send_message.click(function(){
+			socket.emit('new_message', {sendmessage : message.val(),sendTo:"<%=talkingto%>",sender:"<%=currentUser.username%>"});
+			sendMessage({sendmessage: message.val(),sendTo:"<%=talkingto%>"});
 		})
-		socket.on("clicksend",function(data){
-			console.log("clicked");
-		});
-		//	socket.on('message', test)
-		socket.on('message', addMessages)
-		function test(){
-			console.log("Yahzee");
-		}
 
-		function test(){
-			console.log("We are connected");
+		//Listen on new_message
+		socket.on("new_message", (data) => {
+			feedback.html('');
+			message.val('');
+			console.log("Peep Data: ",data);
+			addMessages(data);
+		})
+
+		//Emit typing
+		message.bind("keypress", () => {
+			socket.emit('typing')
+		})
+
+		//Listen on typing
+		socket.on('typing', (data) => {
+			feedback.html("<p><i> typing a message..." + "</i></p>");
+		})
+
+		function sendMessage(message){
+			$.post('http://localhost:3000/message', message);
 		}
 		function addMessages(message){
-			$("#messages").append('<h4> ${message.name} </h4> <p> test </p>')
+			chatroom.append(`<li class="right clearfix">
+				<div class="chat-body clearfix">
+					<div class="header">
+						<small class=" text-muted"><span class="glyphicon glyphicon-time"></span></small>
+						<strong class="pull-right primary-font">`+ message.sender +`</strong>
+					</div>
+					<p>
+						`+message.message+`
+					</p>
+				</div>
+			</li>`);
 		}
 		function getMessages(){
-		  $.get('http://localhost:3000/messages', (data) => {
-			data.forEach(addMessages);
-		  })
-		}
-		function sendMessage(message){
-		  $.post('http://localhost:3000/messages', message)
-		}
-	</script> -->
-
-</html>
+			 $.get('http://localhost:3000/message', (data) => {
+				 console.log("here is data:",data);
+			   data.forEach(addMessages);
+			 })
+		   }
+	</script>
 
 <% include ../partials/footer %>
