@@ -45,7 +45,10 @@ app.use(function(req,res,next){
 });
 //
 //var url = "mongodb://rcrc:zx1230321@ds161183.mlab.com:61183/chatapp";
-mongoose.connect("mongodb://localhost/chat_app");
+// mongoose.connect("mongodb://localhost/chat_app");
+
+var url = process.env.DATABASEURL || "mongodb://localhost/chat_app";
+mongoose.connect(url);
 
 app.use("/message",messageRoutes);
 app.use(indexRoutes);
@@ -86,10 +89,12 @@ io.on("connection",function(socket){
 });
 
 
-var server = http.listen(3000, () => {
-  console.log('server is running on port', server.address().port);
+// var server = http.listen(3000, () => {
+//   console.log('server is running on port', server.address().port);
+// });
+var server = http.listen(process.env.PORT||3000, process.env.IP, function(){
+  console.log("Server Up...");
 });
-
 // app.listen(3000, process.env.IP, function(){
 //   console.log("Server Up...");
 // });
