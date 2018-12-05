@@ -13,9 +13,6 @@ router.get("/", function(req,res){
 			"$options": "i"
 		}
 	},function(err,found){
-
-//console.log(Object.getOwnPropertyNames(found[0].messageLog[0]));
-//		console.log("log checker: ",found[0].messageLog[0].sendTo);
 		res.send(found[0].messageLog);
 	});
 });
@@ -45,9 +42,6 @@ router.post("/", async function(req,res){
 			if(err){
 				req.flash("error", "No User Found");
 			}
-			//console.log("Send To ",req.body.sendTo);
-			//console.log("FOUND: ",found[0]);
-		//	console.log(messageTest);
 			found[0].messageLog.push(created);
 			found[0].save();
 			// console.log("right before emit");

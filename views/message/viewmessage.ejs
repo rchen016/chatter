@@ -69,17 +69,36 @@
 			$.post('http://localhost:3000/message', message);
 		}
 		function addMessages(message){
-			chatroom.append(`<li class="right clearfix">
-				<div class="chat-body clearfix">
-					<div class="header">
-						<small class=" text-muted"><span class="glyphicon glyphicon-time"></span></small>
-						<strong class="pull-right primary-font">`+ message.sender +`</strong>
+			console.log("Sendto: ",message.sendTo);
+			console.log("Talkingto: ","<%=talkingto%>");
+			console.log("Current User: ","<%=currentUser.username%>");
+			//Ensure user only sees who they are talking to
+			if(message.sendTo=="<%=talkingto%>" && message.sender=="<%=currentUser.username%>"){
+				chatroom.append(`<li class="right clearfix">
+					<div class="chat-body clearfix">
+						<div class="header">
+							<small class=" text-muted"><span class="glyphicon glyphicon-time"></span></small>
+							<strong class="pull-right primary-font">`+ message.sender +`</strong>
+						</div>
+						<p>
+							`+message.message+`
+						</p>
 					</div>
-					<p>
-						`+message.message+`
-					</p>
-				</div>
-			</li>`);
+				</li>`);
+			}
+			if(message.sender=="<%=talkingto%>"){
+				chatroom.append(`<li class="right clearfix">
+					<div class="chat-body clearfix">
+						<div class="header">
+							<small class=" text-muted"><span class="glyphicon glyphicon-time"></span></small>
+							<strong class="pull-right primary-font">`+ message.sender +`</strong>
+						</div>
+						<p>
+							`+message.message+`
+						</p>
+					</div>
+				</li>`);
+			}
 		}
 		function getMessages(){
 			 $.get('http://localhost:3000/message', (data) => {
