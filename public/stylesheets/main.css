@@ -10,7 +10,7 @@
 	width: 30%;
 }
 
-/* Chat Box CSS from  Bootstrap Template Start*/
+/* Chat Box CSS from  Bootsnipp Template Start*/
 .chat
 {
     list-style: none;
@@ -72,6 +72,71 @@
 }
 
 #message{
-	width: 85%;
+	width: 75%;
 }
-/* Chat Box CSS from  Bootstrap Template End*/
+/* Chat Box CSS from  Bootsnipp Template End*/
+
+/*Login Template Bootsnipp Start */
+
+.container{
+	height: 100%;
+	align-content: center;
+}
+
+.card{
+	height: 370px;
+	margin-top: auto;
+	margin-bottom: auto;
+	width: 400px;
+	background-color: #6c757d !important;
+}
+
+
+.card-header h3{
+	color: white;
+}
+
+.input-group-prepend span{
+	width: 50px;
+	background-color: #FFC312;
+	color: black;
+	border:0 !important;
+}
+
+input:focus{
+	outline: 0 0 0 0  !important;
+	box-shadow: 0 0 0 0 !important;
+}
+
+.remember{
+	color: white;
+}
+
+.remember input
+{
+	width: 20px;
+	height: 20px;
+	margin-left: 15px;
+	margin-right: 5px;
+}
+
+.login_btn{
+	color: black;
+	background-color: #FFC312;
+	width: 100px;
+}
+
+.login_btn:hover{
+	color: black;
+	background-color: white;
+}
+
+.links{
+	color: white;
+}
+
+.links a{
+	margin-left: 4px;
+}
+
+/*Login Template Bootsnipp End */

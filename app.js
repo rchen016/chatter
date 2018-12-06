@@ -58,7 +58,7 @@ io.on("connection",function(socket){
 	// console.log('User connected');
 
 	socket.on('disconnect', () => {
-		console.log('user disconnected');
+		console.log('user disconnected ',socket.id);
 	});
 	socket.on('clicksend', (data) => {
 		console.log(data.test);
@@ -66,7 +66,7 @@ io.on("connection",function(socket){
 		//socket.broadcast.emit("clicksend","broadcastclick");
 	});
 
-	console.log('New user connected')
+	console.log('New user connected ',socket.id);
 
 	//default username
 	socket.username = ""
@@ -84,7 +84,7 @@ io.on("connection",function(socket){
 
     //listen on typing
     socket.on('typing', (data) => {
-    	socket.broadcast.emit('typing', {username : socket.username})
+    	socket.broadcast.emit('typing', {sid : socket.id})
     })
 });
 

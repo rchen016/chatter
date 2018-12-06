@@ -1,19 +1,21 @@
 <% include ../partials/header %>
 
-	<!-- <section id="chatroom">
-		<section id="feedback"></section>
-	</section>
-
-	<section id="input_zone">
-		<input id="message" class="vertical-align" type="text" />
-		<button action="/message" id="send_message" class="vertical-align btn btn-primary" type="button">Send</button>
-	</section> -->
-
-
-
 	<div class="container">
 	    <div class="row">
-	        <div class="col-md-5">
+			<div class="col-1 col-md-3">
+
+			</div>
+	        <div class="col-10 col-md-6">
+				<div class="panel panel-primary">
+                <div class="panel-heading" id="accordion">
+                    <span class="glyphicon glyphicon-comment"></span> Chat
+                    <div class="btn-group pull-right">
+                        <a type="button" class="btn btn-default btn-xs" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                            <span class="glyphicon glyphicon-chevron-down"></span>
+                        </a>
+                    </div>
+                </div>
+				<div class="panel-collapse collapse" id="collapseOne">
 				<div class="panel-body">
                     <ul id="chatroom" class="chat">
 
@@ -26,9 +28,13 @@
 						<button action="/message" id="send_message" class="vertical-align btn btn-primary" type="button">Send</button>
                     </div>
                 </div>
+			</div>
+		        </div>
+				<div class="col-1 col-md-3">
 
-	        </div>
-	    </div>
+				</div>
+	    	</div>
+		</div>
 	</div>
 
 	<script>
@@ -39,6 +45,7 @@
 		var send_message = $("#send_message");
 		var chatroom = $("#chatroom");
 		var feedback = $("#feedback");
+		var debug = true;
 		//populate the message history
 		getMessages();
 		//Emit message
@@ -62,14 +69,17 @@
 
 		//Listen on typing
 		socket.on('typing', (data) => {
+			console.log("ID:!!! ", data.id);
 			feedback.html("<p><i> typing a message..." + "</i></p>");
 		})
 
 		function sendMessage(message){
-			//dev
-			//$.post('http://localhost:3000/message', message);
-			//Live
-			$.post('https://fierce-harbor-94742.herokuapp.com/message', message);
+			if(debug){
+				$.post('http://localhost:3000/message', message);
+			}
+			else{
+				$.post('https://fierce-harbor-94742.herokuapp.com/message', message);
+			}
 		}
 		function addMessages(message){
 			console.log("Sendto: ",message.sendTo);
@@ -104,17 +114,19 @@
 			}
 		}
 		function getMessages(){
-			//Dev
-			 // $.get('http://localhost:3000/message', (data) => {
-				//  console.log("here is data:",data);
-			 //   data.forEach(addMessages);
-			 // })
-			 //Live
-			 $.get('https://fierce-harbor-94742.herokuapp.com/message', (data) => {
-				 console.log("here is data:",data);
-			   data.forEach(addMessages);
-			 })
-		   }
+			if(debug){
+				$.get('http://localhost:3000/message', (data) => {
+					console.log("here is data:",data);
+					data.forEach(addMessages);
+				})
+			}
+			else{
+				$.get('https://fierce-harbor-94742.herokuapp.com/message', (data) => {
+					console.log("here is data:",data);
+					data.forEach(addMessages);
+				})
+			}
+		}
 	</script>
 
 <% include ../partials/footer %>
