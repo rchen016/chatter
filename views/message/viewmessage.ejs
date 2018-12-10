@@ -1,39 +1,27 @@
 <% include ../partials/header %>
 
 	<div class="container">
-	    <div class="row">
+		<div class="row">
 			<div class="col-1 col-md-3">
 
 			</div>
-	        <div class="col-10 col-md-6">
+			<div class="col-10 col-md-6">
 				<div class="panel panel-primary">
-                <div class="panel-heading" id="accordion">
-                    <span class="glyphicon glyphicon-comment"></span> Chat
-                    <div class="btn-group pull-right">
-                        <a type="button" class="btn btn-default btn-xs" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-                            <span class="glyphicon glyphicon-chevron-down"></span>
-                        </a>
-                    </div>
-                </div>
-				<div class="panel-collapse collapse" id="collapseOne">
-				<div class="panel-body">
-                    <ul id="chatroom" class="chat">
-
-                    </ul>
-					<section id="feedback"></section>
+					<div class="panel-body">
+						<ul id="chatroom" class="chat">
+						</ul>
+						<section id="feedback"></section>
+					</div>
+					<div class="panel-footer">
+						<div class="input-group">
+							<input id="message" class="vertical-align" type="text" placeholder="Type your message here..."  />
+							<button action="/message" id="send_message" class="vertical-align btn btn-secondary" type="button">Send</button>
+						</div>
+					</div>
 				</div>
-                <div class="panel-footer">
-                    <div class="input-group">
-						<input id="message" class="vertical-align" type="text" placeholder="Type your message here..."  />
-						<button action="/message" id="send_message" class="vertical-align btn btn-primary" type="button">Send</button>
-                    </div>
-                </div>
+			<div class="col-1 col-md-3">
+
 			</div>
-		        </div>
-				<div class="col-1 col-md-3">
-
-				</div>
-	    	</div>
 		</div>
 	</div>
 
@@ -58,7 +46,6 @@
 		socket.on("new_message", (data) => {
 			feedback.html('');
 			message.val('');
-			console.log("Peep Data: ",data);
 			addMessages(data);
 		})
 
@@ -69,7 +56,6 @@
 
 		//Listen on typing
 		socket.on('typing', (data) => {
-			console.log("ID:!!! ", data.id);
 			feedback.html("<p><i> typing a message..." + "</i></p>");
 		})
 
@@ -88,7 +74,7 @@
 			//Ensure user only sees who they are talking to
 			if(message.sendTo=="<%=talkingto%>" && message.sender=="<%=currentUser.username%>"){
 				chatroom.append(`<li class="right clearfix">
-					<div class="chat-body clearfix">
+					<div class="chat-body clearfix userTextBox">
 						<div class="header">
 							<small class=" text-muted"><span class="glyphicon glyphicon-time"></span></small>
 							<strong class="pull-right primary-font">`+ message.sender +`</strong>

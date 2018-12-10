@@ -1,13 +1,13 @@
-var express = require("express")
-	mongoose = require("mongoose"),
-	Message = require("./models/message"),
+var express          = require("express")
+	mongoose         = require("mongoose"),
+	Message          = require("./models/message"),
 	passport         = require("passport"),
 	LocalStrategy    = require("passport-local"),
 	path             = require("path"),
 	User             = require("./models/user"),
 	methodOverride   = require("method-override"),
 	flash            = require("connect-flash"),
-	bodyParser = require("body-parser");
+	bodyParser       = require("body-parser");
 var app = express();
 var messageRoutes    = require("./routes/message"),
     friendRoutes     = require("./routes/friend"),
@@ -15,7 +15,7 @@ var messageRoutes    = require("./routes/message"),
 
 	var http = require("http").Server(app);
 	var io = require("socket.io")(http);
-//require("./routes/message.js")(io);
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
@@ -55,15 +55,9 @@ app.use(indexRoutes);
 app.use(friendRoutes);
 
 io.on("connection",function(socket){
-	// console.log('User connected');
 
 	socket.on('disconnect', () => {
 		console.log('user disconnected ',socket.id);
-	});
-	socket.on('clicksend', (data) => {
-		console.log(data.test);
-	//	res.locals.messageTest = data.test;
-		//socket.broadcast.emit("clicksend","broadcastclick");
 	});
 
 	console.log('New user connected ',socket.id);
@@ -88,13 +82,6 @@ io.on("connection",function(socket){
     })
 });
 
-
-// var server = http.listen(3000, () => {
-//   console.log('server is running on port', server.address().port);
-// });
 var server = http.listen(process.env.PORT||3000, process.env.IP, function(){
   console.log("Server Up...");
 });
-// app.listen(3000, process.env.IP, function(){
-//   console.log("Server Up...");
-// });

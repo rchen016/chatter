@@ -74,6 +74,26 @@
 #message{
 	width: 75%;
 }
+
+.friendList{
+	display:flex;
+}
+
+.userTextBox{
+	background-color: #F8F8F8;
+	width: 100% !important;
+}
+
+.addBtn{
+	display: block;
+	margin: 0 auto;
+}
+
+.userField{
+	width:50%;
+	display: block;
+	margin: 0 auto;
+}
 /* Chat Box CSS from  Bootsnipp Template End*/
 
 /*Login Template Bootsnipp Start */

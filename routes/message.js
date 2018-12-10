@@ -21,10 +21,6 @@ router.post("/", async function(req,res){
 	var sendTo = req.body.sendTo;
 	var sender = req.user.username;
 	var text = req.body.sendmessage;
-	console.log("Enter /message");
-	console.log("Who?: ",req.body.sendTo);
-	console.log("MSG?: ",req.body.sendmessage);
-	console.log("USER: ",req.user.username);
 	Message.create({sendTo:sendTo,sender:sender,message:text},function(err,created){
 	 	if(err){
 			req.flash("error",error);
@@ -44,10 +40,6 @@ router.post("/", async function(req,res){
 			}
 			found[0].messageLog.push(created);
 			found[0].save();
-			// console.log("right before emit");
-			// req.flash("success","Sent");
-			// res.redirect("/");
-			// return;
 		});
 	});
 });
