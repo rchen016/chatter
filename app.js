@@ -48,6 +48,7 @@ app.use(function(req,res,next){
 // mongoose.connect("mongodb://localhost/chat_app");
 
 var url = process.env.DATABASEURL || "mongodb://localhost/chat_app";
+//var url =  "mongodb://localhost/chat_app";
 mongoose.connect(url);
 
 app.use("/message",messageRoutes);
@@ -55,7 +56,7 @@ app.use(indexRoutes);
 app.use(friendRoutes);
 
 io.on("connection",function(socket){
-
+	socket.join("localb");
 	socket.on('disconnect', () => {
 		console.log('user disconnected ',socket.id);
 	});
@@ -80,6 +81,9 @@ io.on("connection",function(socket){
     socket.on('typing', (data) => {
     	socket.broadcast.emit('typing', {sid : socket.id})
     })
+
+	io.to("localb").emit("B");
+	io.to("locala").emit("A");
 });
 
 var server = http.listen(process.env.PORT||3000, process.env.IP, function(){

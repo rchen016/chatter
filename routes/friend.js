@@ -9,6 +9,7 @@ router.get("/friendRequest",function(req,res){
 });
 
 router.post("/friendRequest",function(req,res){
+	var userIndex = 0;
 	User.find({
 		"username":{
 			"$regex": req.body.username,
@@ -18,18 +19,29 @@ router.post("/friendRequest",function(req,res){
 		if(err){
 			req.flash("error", "No User Found");
 		}
-		for(var i=0; i< found[0].friendReqList.length; i++){
-			console.log("1: ",found[0].friendReqList[i]);
+		console.log("Request User Found: ",found);
+		//find the correct user to add
+		for(var i=0;i<found.length;i++){
+			console.log("check found list",found[i].username);
+			console.log("requester ",req.user.username);
+			if(found[i].username==req.body.username){
+				userIndex=i;
+			}
+		}
+		//verify hasn't already added
+		for(var i=0; i< found[userIndex].friendReqList.length; i++){
+			console.log("1: ",found[userIndex].friendReqList[i]);
 			console.log("2: ",req.user.username);
-			if(found[0].friendReqList[i]==req.user.username){
+			if(found[userIndex].friendReqList[i]==req.user.username){
 				req.flash("error", "Already Requested");
 				res.locals.error = req.flash("error");
 				res.render("friend/request");
 				return;
 			}
 		}
-		found[0].friendReqList.push(req.user.username);
-		found[0].save();
+		console.log("Requested:!!  ", found[userIndex].username);
+		found[userIndex].friendReqList.push(req.user.username);
+		found[userIndex].save();
 		req.flash("success", "Requested");
 		res.locals.success = req.flash("success");
 		res.render("friend/request");
@@ -46,9 +58,12 @@ router.post("/addFriend",function(req,res){
 			"$options": "i"
 		}
 	},function(err,found){
+		console.log("Found: ",found);
 		if(err){
 			req.flash("error", "No User Found");
 		}
+
+		console.log("Request User Found1: ",found);
 		req.user.friendReqList.forEach(function(found){
 			if(req.body.addfriend == found){
 				req.user.friendReqList.splice(counter,1);
