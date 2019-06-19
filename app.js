@@ -49,7 +49,7 @@ app.use(function(req,res,next){
 
 var url = process.env.DATABASEURL || "mongodb://localhost/chat_app";
 //var url =  "mongodb://localhost/chat_app";
-mongoose.connect(url);
+mongoose.connect(url,{useNewUrlParser: true});
 
 app.use("/message",messageRoutes);
 app.use(indexRoutes);
